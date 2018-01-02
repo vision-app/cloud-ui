@@ -9,12 +9,12 @@
 const SelectColor = {
     name: 'u-color-select',
     props: {
-        options: Array,
-        readonly: Boolean,
-        disabled: Boolean,
+        options: { type: Array, default: [] },
+        readonly: { type: Boolean, default: false },
+        disabled: { type: Boolean, default: false },
         // visible: { type: Boolean, default: true },
         width: { type: [String, Number], default: '160' },
-        value: String,
+        value: { type: String, default: '' },
     },
     data() {
         return {
@@ -22,15 +22,43 @@ const SelectColor = {
             selectedIndex: this.initSelectedIndex(this.value),
         };
     },
-    created() {
-        document.addEventListener('click', this.fadeOut);
-    },
     computed: {
         selected() {
             if (this.options.length === 0)
                 return { name: '请选择', value: '' };
             return this.options[this.selectedIndex];
         },
+    },
+    watch: {
+        open(newValue) {
+            const index = SelectColor.opens.indexOf(this);
+            if (newValue && index < 0)
+                SelectColor.opens.push(this);
+            else if (!newValue && index > -1)
+                SelectColor.opens.splice(index, 1);
+        },
+        options(newValue) {
+            this.selectedIndex = this.initSelectedIndex(this.value);
+        },
+        value(newValue) {
+            this.selectedIndex = this.initSelectedIndex(newValue);
+        },
+        /**
+         * @event change 选中列表项改变时触发
+         * @property {object} sender 事件发送对象
+         * @property {object} selected 改变后的列表对象
+         * @property {String} value 改变后的列表对象的值
+         */
+        selected(newValue) {
+            this.$emit('change', {
+                sender: this,
+                selected: newValue,
+                value: newValue.value,
+            });
+        },
+    },
+    created() {
+        document.addEventListener('click', this.fadeOut);
     },
     methods: {
         toggle(value) {
@@ -87,34 +115,6 @@ const SelectColor = {
                     element2 = element2.parentElement;
                 }
                 item.toggle(false);
-            });
-        },
-    },
-    watch: {
-        open(newValue) {
-            const index = SelectColor.opens.indexOf(this);
-            if (newValue && index < 0)
-                SelectColor.opens.push(this);
-            else if (!newValue && index > -1)
-                SelectColor.opens.splice(index, 1);
-        },
-        options(newValue) {
-            this.selectedIndex = this.initSelectedIndex(this.value);
-        },
-        value(newValue) {
-            this.selectedIndex = this.initSelectedIndex(newValue);
-        },
-        /**
-         * @event change 选中列表项改变时触发
-         * @property {object} sender 事件发送对象
-         * @property {object} selected 改变后的列表对象
-         * @property {String} value 改变后的列表对象的值
-         */
-        selected(newValue) {
-            this.$emit('change', {
-                sender: this,
-                selected: newValue,
-                value: newValue.value,
             });
         },
     },
