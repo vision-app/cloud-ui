@@ -60,3 +60,19 @@ export default {
 };
 </script>
 ```
+
+## BarChart API
+### Props/Attrs
+
+| Prop/Attr | Type | Default | Description |
+| --------- | ---- | ------- | ----------- |
+| data | Array | undefined | 展示数据 |
+| title | String | '' | 标题 |
+| series | Array | [] | 序列信息 |
+| border | Boolean | false | 是否显示边框 |
+| legend | Boolean | false | 是否显示图例 |
+| width | String | "100%" | 宽度 |
+| height | String | "480px" | 高度 |
+| xAxis | Object | {} | 横坐标信息 |
+| yAxis | Object | {} | 纵坐标信息 |
+| stack | [String/Boolean] | false | 是否堆叠显示 |
