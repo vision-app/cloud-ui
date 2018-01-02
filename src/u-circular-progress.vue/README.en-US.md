@@ -1,7 +1,7 @@
-# 圆形进度条 CircularProgress
+# Circular Specific Progress
 
-## 示例
-### 基本形式
+## Examples
+### Basic
 
 ```html
 <u-circular-specific-progress :percent="10">
@@ -9,15 +9,15 @@
 </u-circular-specific-progress>
 ```
 
-## CircularProgress API
+## API
 ### Attrs/Props
 
 | Attr/Prop | Type | Default | Description |
 | --------- | ---- | ------- | ----------- |
-| percent | Number | `0` | 进度 |
+| percent | Number | `0` | The percentage of progress |
 
 ### Slots
 
 | Slot | Description |
 | ---- | ----------- |
-| (default) | 插入中间的模板 |
+| (default) | Hold the text and can contain HTML |
