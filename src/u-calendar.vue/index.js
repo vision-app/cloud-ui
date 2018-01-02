@@ -22,23 +22,17 @@ const Calendar = {
                 return new Date();
             },
         },
-        readonly: [String, Boolean],
-        disabled: [String, Boolean],
+        readonly: { type: Boolean, default: false },
+        disabled: { type: Boolean, default: false },
         minDate: [String, Date, Number],
         maxDate: [String, Date, Number],
-        yearDiff: {
-            type: [String, Number],
-            default: 3,
-        },
-        yearAdd: {
-            type: [String, Number],
-            default: 1,
-        },
+        yearDiff: { type: Number, default: 3 },
+        yearAdd: { type: Number, default: 1 },
     },
     data() {
         return {
             days_: [],
-            showDate: this.date,
+            currentDate: this.date,
             updateFlag: false,
             monthCol: this.getMonthCol(),
             yearCol: this.getYearCol(),
@@ -47,38 +41,38 @@ const Calendar = {
         };
     },
     computed: {
-        showYear: {
+        currentYear: {
             get() {
-                const date = this.transformDate(this.showDate);
+                const date = this.transformDate(this.currentDate);
                 return date.getFullYear();
             },
             set(value) {
-                const date = this.showDate;
+                const date = this.currentDate;
                 const oldMonth = date.getMonth();
                 date.setFullYear(value);
                 if (date.getMonth() !== oldMonth)
                     date.setDate(0);
 
                 this.updateFlag = true;
-                this.showDate = new Date(date);
+                this.setCurrentDate(new Date(date));
             },
         },
-        showMonth: {
+        currentMonth: {
             get() {
-                const date = this.transformDate(this.showDate);
+                const date = this.transformDate(this.currentDate);
                 const month = date.getMonth() + 1;
                 return month;
             },
             set(value) {
-                const date = this.showDate;
+                const date = this.currentDate;
                 date.setMonth(value - 1);
 
                 this.updateFlag = true;
-                this.showDate = new Date(date);
+                this.setCurrentDate(new Date(date));
             },
         },
         // yearCol() {
-        //     const date = this.transformDate(this.showDate);
+        //     const date = this.transformDate(this.currentDate);
         //     const currentYear = date.getFullYear();
         //     const yearcol = [];
         //     const yearmin = currentYear - this.yearDiff;
@@ -96,20 +90,10 @@ const Calendar = {
     },
     watch: {
         date(newValue) {
-            this.showDate = this.transformDate(newValue);
+            this.setCurrentDate(this.transformDate(newValue));
             this.updateFlag = true;
         },
-        showDate(newValue) {
-            // 如果超出日期范围，则设置为范围边界的日期
-            const isOutOfRange = this.isOutOfRange(newValue);
-            if (isOutOfRange) {
-                this.showDate = isOutOfRange;
-
-                // 防止第二次刷新同月
-                this.update();
-                return;
-            }
-
+        currentDate(newValue) {
             if (this.updateFlag) {
                 this.updateFlag = false;
                 this.update();
@@ -154,11 +138,11 @@ const Calendar = {
     },
     methods: {
         yearSelect(value) {
-            this.showYear = value;
+            this.currentYear = value;
             this.yearvisible = false;
         },
         monthSelect(month) {
-            this.showMonth = month.value;
+            this.currentMonth = month.value;
             this.monthvisible = false;
         },
         getYearCol() {
@@ -242,8 +226,8 @@ const Calendar = {
          */
         update() {
             this.days_ = [];
-            this.showDate = this.transformDate(this.showDate);
-            const date = this.showDate;
+            this.setCurrentDate(this.transformDate(this.currentDate));
+            const date = this.currentDate;
             const month = date.getMonth();
             const mfirst = new Date(date);
             mfirst.setDate(1);
@@ -257,52 +241,8 @@ const Calendar = {
             do {
                 tmpTime = mfirstTime + (num++) * MS_OF_DAY;
                 tmp = new Date(tmpTime);
-                this.days_.push(tmp);
+                this.days_.push(tmp); // Date类型
             } while (tmpTime < lastTime);
-        },
-        /**
-         * @method addYear(year) 调整年份
-         * @public
-         * @param  {number=0} year 加/减的年份
-         * @return {void}
-         */
-        addYear(year) {
-            if (this.readonly || this.disabled || !year)
-                return;
-
-            if (isNaN(year))
-                throw new TypeError(year + ' is not a number!');
-
-            const date = this.showDate;
-            const oldMonth = date.getMonth();
-            date.setFullYear(date.getFullYear() + year);
-            if (date.getMonth() !== oldMonth)
-                date.setDate(0);
-
-            this.updateFlag = true;
-            this.showDate = new Date(date);
-        },
-        /**
-         * @method addMonth(month) 调整月份
-         * @public
-         * @param  {number=0} month 加/减的月份
-         * @return {void}
-         */
-        addMonth(month) {
-            if (this.readonly || this.disabled || !month)
-                return;
-
-            if (isNaN(month))
-                throw new TypeError(month + ' is not a number!');
-
-            const date = this.showDate;
-            const correctMonth = date.getMonth() + month;
-            date.setMonth(correctMonth);
-            // 如果跳月，则置为上一个月
-            if ((date.getMonth() - correctMonth) % 12)
-                date.setDate(0);
-            this.updateFlag = true;
-            this.showDate = new Date(date);
         },
         /**
          * @method select(date) 选择一个日期
@@ -315,15 +255,13 @@ const Calendar = {
                 return;
             const _month = date.getMonth() + 1;
 
-            if (this.showMonth !== _month)
+            if (this.currentMonth !== _month)
                 this.updateFlag = true;
 
-            this.showDate = new Date(date);
+            this.setCurrentDate(new Date(date));
 
             /**
-             * @event select 选择某一个日期时触发
-             * @property {object} sender 事件发送对象
-             * @property {object} date 当前选择的日期
+             * TODO： 弃用，改为change
              */
             this.$emit('select', {
                 sender: this,
@@ -358,6 +296,29 @@ const Calendar = {
         fix(str) {
             str = '' + (String(str) || '');
             return str.length <= 1 ? '0' + str : str;
+        },
+        // 设置currentDate并抛出事件
+        setCurrentDate(date) {
+            if (date === this.currentDate)
+                return;
+            // 如果超出日期范围，则设置为范围边界的日期
+            const isOutOfRange = this.isOutOfRange(date);
+            if (isOutOfRange) {
+                this.setCurrentDate(new Date(isOutOfRange));
+
+                // 防止第二次刷新同月
+                this.update();
+                return;
+            }
+
+            let cancel = false;
+            this.$emit('before-change', {
+                preventDefault: () => cancel = true,
+            });
+            if (cancel)
+                return;
+
+            this.currentDate = date;
         },
     },
 };

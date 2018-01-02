@@ -1,27 +1,27 @@
 <div :class="$style.root" :disabled="disabled">
     <div :class="$style.head">
-        <u-popper trigger="click" :open.sync="yearvisible" appendTo="reference">
-            <div :class="$style.year">
-                <span :class="$style.textYear">{{showYear}}年</span>
+        <u-popper trigger="click" :open.sync="yearvisible" appendTo="reference" :disabled="readonly || disabled">
+            <div :class="$style.year" :disabled="readonly || disabled">
+                <span :class="$style.textYear">{{currentYear}}年</span>
             </div>
             <div :class="$style.yearList" slot="popper" @click.stop>
-                <u-list-view :value="showYear" @select="yearSelect($event.value)">
+                <u-list-view :value="currentYear" @select="yearSelect($event.value)">
                     <u-list-view-item v-for="(year, index) in yearCol" :value="year.value" :disabled="year.disabled">{{year.value}}年</u-list-view-item>
                 </u-list-view>
             </div>
         </u-popper>
-        <u-popper :class="$style.monthPopper" trigger="click" placement="bottom-end" :open.sync="monthvisible" appendTo="reference">
-            <div :class="$style.month">
-                <span :class="$style.textMonth">{{showMonth}}月</span>
+        <u-popper :class="$style.monthPopper" trigger="click" placement="bottom-end" :open.sync="monthvisible" appendTo="reference" :disabled="readonly || disabled">
+            <div :class="$style.month" :disabled="readonly || disabled">
+                <span :class="$style.textMonth">{{currentMonth}}月</span>
             </div>
             <ul slot="popper" :class="$style.monthList">
-                <li :class="$style.listitem" v-for="(month, mindex) in monthCol" :role="month.value === showMonth" :disabled="month.disabled" @click.stop="monthSelect(month, mindex)">{{month.value}}</li>
+                <li :class="$style.listitem" v-for="(month, mindex) in monthCol" :role="month.value === currentMonth" :disabled="month.disabled" @click.stop="monthSelect(month, mindex)">{{month.value}}</li>
             </ul>
         </u-popper>
     </div>
     <div :class="$style.content">
         <div :class="$style.week"><span :class="$style.dayitem" role="week">日</span><span :class="$style.dayitem">一</span><span :class="$style.dayitem">二</span><span :class="$style.dayitem">三</span><span :class="$style.dayitem">四</span><span :class="$style.dayitem">五</span><span :class="$style.dayitem" role="week">六</span></div>
-        <div :class="$style.day"><span v-for="day in days_" :class="$style.item" :sel="showDate.toDateString() === day.toDateString() ? 'sel' : ''" :disabled="!!isOutOfRange(day)" :role="showDate.getMonth() !== day.getMonth() ? 'muted': ''" @click.stop="select(day)">{{day | format('dd')}}</span></div>
+        <div :class="$style.day"><span v-for="day in days_" :class="$style.item" :sel="currentDate.toDateString() === day.toDateString() ? 'sel' : ''" :disabled="!!isOutOfRange(day)" :role="currentDate.getMonth() !== day.getMonth() ? 'muted': ''" @click.stop="select(day)">{{day | format('dd')}}</span></div>
         <slot></slot>
     </div>
 </div>
