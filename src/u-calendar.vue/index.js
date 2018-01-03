@@ -1,7 +1,8 @@
 import uPopover from '../u-popover.vue';
 import uListViewItem from 'proto-ui.vusion/src/u-list-view-item.vue';
 import uListView from 'proto-ui.vusion/src/u-list-view.vue';
-const MS_OF_DAY = 24 * 3600 * 1000;
+const MS_OF_DAY = 86400000; // 24 * 3600 * 1000
+const isDate = (o) => ({}.toString.call(o) === '[object Date]' && o.toString() !== 'Invalid Date' && !isNaN(o));
 
 /**
  * @class Calendar
@@ -24,8 +25,8 @@ const Calendar = {
         },
         readonly: { type: Boolean, default: false },
         disabled: { type: Boolean, default: false },
-        minDate: [String, Date, Number],
-        maxDate: [String, Date, Number],
+        minDate: { type: [String, Number, Date], validator: (value) => isDate(new Date(value)) },
+        maxDate: { type: [String, Number, Date], validator: (value) => isDate(new Date(value)) },
         yearDiff: { type: Number, default: 3 },
         yearAdd: { type: Number, default: 1 },
     },
@@ -47,7 +48,7 @@ const Calendar = {
                 return date.getFullYear();
             },
             set(value) {
-                const date = this.currentDate;
+                const date = new Date(this.currentDate);
                 const oldMonth = date.getMonth();
                 date.setFullYear(value);
                 if (date.getMonth() !== oldMonth)
@@ -64,7 +65,7 @@ const Calendar = {
                 return month;
             },
             set(value) {
-                const date = this.currentDate;
+                const date = new Date(this.currentDate); // 创建新Date，不修改currentDate
                 date.setMonth(value - 1);
 
                 this.updateFlag = true;
@@ -94,11 +95,12 @@ const Calendar = {
             this.updateFlag = true;
         },
         currentDate(newValue) {
-            if (this.updateFlag) {
-                this.updateFlag = false;
-                this.update();
+            if (newValue) {
+                if (this.updateFlag) {
+                    this.updateFlag = false;
+                    this.update();
+                }
             }
-
             /**
              * @event change 日期改变时触发
              * @property {object} sender 事件发送对象
@@ -108,6 +110,8 @@ const Calendar = {
                 sender: this,
                 date: newValue,
             });
+
+            this.$emit('update:date', new Date(newValue));
         },
         // 最小值 最大值 发生变化 需要监听
     },
@@ -134,6 +138,13 @@ const Calendar = {
         },
     },
     created() {
+        if (this.minDate && this.maxDate) {
+            const minDate = new Date(this.minDate);
+            const maxDate = new Date(this.maxDate);
+            if (minDate / MS_OF_DAY >> 0 > maxDate / MS_OF_DAY >> 0)
+                throw new RangeError('Parameter must be between ' + minDate + ' and ' + maxDate);
+        }
+
         this.update();
     },
     methods: {
@@ -253,6 +264,10 @@ const Calendar = {
         select(date) {
             if (this.readonly || this.disabled || this.isOutOfRange(date))
                 return;
+            date = new Date(date);
+            if (!isDate(date))
+                throw new TypeError('date类型错误');
+
             const _month = date.getMonth() + 1;
 
             if (this.currentMonth !== _month)
@@ -275,6 +290,10 @@ const Calendar = {
          * @return {boolean|Date} date 如果没有超出日期范围，则返回false；如果超出日期范围，则返回范围边界的日期
          */
         isOutOfRange(date) {
+            date = new Date(date);
+            if (!isDate(date))
+                throw new TypeError('date类型错误');
+
             let minDate = this.transformDate(this.minDate);
             let maxDate = this.transformDate(this.maxDate);
 
@@ -299,7 +318,7 @@ const Calendar = {
         },
         // 设置currentDate并抛出事件
         setCurrentDate(date) {
-            if (date === this.currentDate)
+            if (new Date(date).getTime() === new Date(this.currentDate).getTime())
                 return;
             // 如果超出日期范围，则设置为范围边界的日期
             const isOutOfRange = this.isOutOfRange(date);
@@ -322,12 +341,5 @@ const Calendar = {
         },
     },
 };
-
-const DateRangeError = function (minDate, maxDate) {
-    this.name = 'DateRangeError';
-    this.message = 'Wrong Date Range where `minDate` is ' + minDate + ' and `maxDate` is ' + maxDate + '!';
-};
-DateRangeError.prototype = Object.create(RangeError.prototype);
-Calendar.DateRangeError = DateRangeError.prototype.constructor = DateRangeError;
 
 export default Calendar;

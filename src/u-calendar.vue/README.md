@@ -29,7 +29,7 @@
 ### Props/Attrs
 | Prop/Attr | Type | Default | Description |
 | --------- | ---- | ------- | ----------- |
-| date | [String, Number, Date] | new Date() | 当前日期 |
+| date.sync | [String, Number, Date] | new Date() | 当前日期 |
 | minDate | [String, Number, Date] |  | 最小日期 |
 | maxDate | [String, Number, Date] |  | 最大日期 |
 | disabled | Boolean | false | 禁用 |
@@ -48,8 +48,8 @@
 | ----- | ---- | ----------- |
 | sender | Object | 事件发送对象 |
 | date | Date | 当前选择日期 |
-#### @change @deprecated
-select事件触发
+#### @select @deprecated 
+select事件触发：只有调用select方法时触发
 | Param | Type | Description |
 | ----- | ---- | ----------- |
 | sender | Object | 事件发送对象 |
@@ -58,4 +58,12 @@ select事件触发
 #### select(date)
 | Param | Type | Description |
 | ----- | ---- | ----------- |
-| date | Date | 选择某日期 |
+| date | Date | 选择的日期 |
+#### isOutOfRange(date)
+| Param | Type | Description |
+| ----- | ---- | ----------- |
+| date | Date | 日期 |
+
+| Return value | Type | Description |
+| ----- | ---- | ----------- |
+| date | Date | 边界日期 |
