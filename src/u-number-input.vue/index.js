@@ -21,23 +21,25 @@ const NumberInput = {
         },
         format: String,
         placeholder: String,
-        autofocus: [String, Boolean],
-        readonly: [String, Boolean],
-        disabled: [String, Boolean],
+        autofocus: { type: Boolean, default: false },
+        readonly: { type: Boolean, default: false },
+        disabled: { type: Boolean, default: false },
         min: [String, Number],
         max: [String, Number],
         width: {
             type: [String, Number],
-            default: '140',
+            default: '',
         },
         height: {
             type: [String, Number],
-            default: '34',
+            default: '',
         },
+        size: String,
+        gap: { type: Number, default: 1 },
     },
     data() {
         return {
-            showValue: this.formatNumber(this.value),
+            currentValue: this.formatNumber(this.value),
         };
     },
     watch: {
@@ -45,73 +47,81 @@ const NumberInput = {
             // 如果超出数值范围，则设置为范围边界的数值
             const isOutOfRange = this.isOutOfRange(newValue);
             if (isOutOfRange !== false)
-                return this.showValue = this.formatNumber(isOutOfRange);
-            this.showValue = this.formatNumber(newValue);
-        },
-        showValue(newValue, oldValue) {
-            if (typeof newValue === 'string') {
-                const _newValue = +newValue;
-                if (isNaN(_newValue))
-                    this.showValue = this.formatNumber(this.value);
-                else
-                    this.showValue = this.formatNumber(_newValue);
-            }
-
-            // 如果超出数值范围，则设置为范围边界的数值
-            const isOutOfRange = this.isOutOfRange(newValue);
-            if (isOutOfRange !== false)
-                return this.showValue = this.formatNumber(isOutOfRange);
-
-            // this.showValue = this.formatNumber(newValue);
-
-            /**
-             * @event change 数值改变时触发
-             * @property {object} sender 事件发送对象
-             * @property {number} value 改变后的数值
-             */
-            this.$emit('change', {
-                sender: this,
-                value: this.showValue,
-            });
+                return this.$refs.input.set(this.formatNumber(isOutOfRange));
+            this.$refs.input.set(this.formatNumber(newValue));
         },
         min(newValue, oldValue) {
             const _max = this.max;
             if (!isNaN(newValue) && newValue - _max > 0)
                 throw new NumberInput.NumberRangeError(newValue, _max);
 
-            // 如果超出数值范围，则设置为范围边界的数值
-            const isOutOfRange = this.isOutOfRange(this.showValue);
-            if (isOutOfRange !== false)
-                return this.showValue = isOutOfRange;
+            this.limitToRange();
         },
         max(newValue, oldValue) {
             const _min = this.min;
             if (!isNaN(newValue) && _min - newValue > 0)
                 throw new NumberInput.NumberRangeError(_min, newValue);
 
-            // 如果超出数值范围，则设置为范围边界的数值
-            const isOutOfRange = this.isOutOfRange(this.showValue);
-            if (isOutOfRange !== false)
-                return this.showValue = isOutOfRange;
+            this.limitToRange();
         },
     },
     methods: {
+        onChange(event) {
+            this.currentValue = event.value;
+            this.$emit('change', event);
+        },
+        /**
+         * 阻止改变的情况：value不为Number，超出界限，需要format
+         * @param  {[type]} event [description]
+         * @return {[type]}       [description]
+         */
+        onBeforeChange(event) {
+            if (isNaN(event.newValue)) {
+                event.preventDefault();
+                return;
+            }
+            if (this.isOutOfRange(event.newValue)) {
+                event.preventDefault();
+                this.limitToRange();
+                return;
+            }
+            const formatValue = this.formatNumber(event.newValue);
+            if (('' + formatValue) !== ('' + event.newValue)) {
+                this.$refs.input.set(formatValue);
+                return;
+            }
+
+            let cancel = false;
+            this.$emit('before-change', {
+                newValue: event.newValue,
+                oldValue: event.oldValue,
+                preventDefault: () => cancel = true,
+            });
+            if (cancel)
+                event.preventDefault();
+        },
+        onKeyup(event) {
+            this.$emit('keyup', event);
+        },
+        onFocus(event) {
+            this.$emit('focus', event);
+        },
+        onBlur(event) {
+            this.$emit('blur', event);
+        },
+        onInput(event) {
+            this.$emit('input', event);
+        },
         /**
          * @method add(value) 调整数值
          * @public
          * @param  {number=0} value 加/减的值
-         * @return {number} value 计算后的值
          */
-        add(value) {
-            let _showValue = +this.showValue;
-            if (this.readonly || this.disabled || !value)
+        add(isAdd = true) {
+            if (this.readonly || this.disabled)
                 return;
 
-            if (isNaN(value))
-                throw new TypeError(value + ' is not a number!');
-
-            _showValue += value;
-            this.showValue = this.formatNumber(_showValue);
+            this.$refs.input.set(isAdd ? (+this.currentValue + this.gap) : (+this.currentValue - this.gap)); // 更改u-input组件的值
         },
         /**
          * @method isOutOfRange(value) 是否超出规定的数值范围
@@ -131,11 +141,29 @@ const NumberInput = {
             else
                 return false;
         },
+        /**
+         * 数据限定在min-max之间
+         * @return {[type]} [description]
+         */
+        limitToRange(preventChange) {
+            const isOutOfRange = this.isOutOfRange(this.currentValue);
+            if (isOutOfRange !== false)
+                this.$refs.input.set(isOutOfRange);
+        },
+        /**
+         * 不足format长度前面补0: 负数补足为 -0001
+         * @param  {[type]} value [description]
+         * @return {[type]}       [description]
+         */
         formatNumber(value) {
-            value = '' + (value || 0);
+            const isPositive = value >= 0;
+            const tempValue = '' + ((isPositive ? value : -value) || 0);
             if (this.format)
-                return this.format.replace(new RegExp('\\d{0,' + value.length + '}$'), value);
+                return (isPositive ? '' : '-') + this.format.replace(new RegExp('\\d{0,' + tempValue.length + '}$'), tempValue);
             return value;
+        },
+        set(value) {
+            this.$refs.input.set(value);
         },
     },
 };

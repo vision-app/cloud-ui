@@ -61,6 +61,29 @@
 </u-linear-layout>
 ```
 
+### 自定义宽高
+
+``` html
+<u-linear-layout>
+    <u-input value="自定义宽高" width="150" height="40"></u-input>
+</u-linear-layout>
+```
+
+### 撤销输入
+
+``` vue
+<template><u-input value="80" @before-change="onBeforeChange($event)"></u-input></template>
+<script>
+export default {
+    methods: {
+        onBeforeChange($event) {
+            $event.preventDefault();
+        },
+    },
+};
+</script>
+```
+
 ## API
 ### Attrs/Props
 
@@ -75,9 +98,7 @@
 | disabled | Boolean | | 原生属性 |
 | size | String | `'normal'` | 大小扩展，支持一个值：`'mini'`, `'small'`, `'normal'`, `'large'`, `'huge'`, `'full'`，或两个值的组合，前者表示高度，后者表示宽度，类似CSS的padding书写格式 |
 
-### Slots
-
-#### (default)
+### Events
 
 #### @input
 
@@ -85,7 +106,17 @@
 
 | Param | Type | Description |
 | ----- | ---- | ----------- |
-| $event | String | 输入框的值 |
+| $event | String | 输入的值 |
+
+#### @before-change
+
+改变输入框值前触发
+
+| Param | Type | Description |
+| ----- | ---- | ----------- |
+| $event.preventDefault | Function | 阻止关闭流程 |
+| newValue | String | 新值 |
+| oldValue | String | 旧值 |
 
 #### @change
 
@@ -102,7 +133,7 @@
 
 | Param | Type | Description |
 | ----- | ---- | ----------- |
-| $event | String | 原生事件对象 |
+| $event | Object | 原生事件对象 |
 
 #### @blur
 
@@ -110,4 +141,27 @@
 
 | Param | Type | Description |
 | ----- | ---- | ----------- |
-| $event | String | 原生事件对象 |
+| $event | Object | 原生事件对象 |
+
+#### @keyup
+
+释放键盘键时触发
+
+| Param | Type | Description |
+| ----- | ---- | ----------- |
+| $event | Object | 原生事件对象 |
+
+#### @keypress
+
+按下字符键时触发
+
+| Param | Type | Description |
+| ----- | ---- | ----------- |
+| $event | Object | 原生事件对象 |
+
+### Methods
+#### set(value)
+设置input框的值
+| Param | Type | Description |
+| ----- | ---- | ----------- |
+| value | 不限定 | 要设置的值 |
