@@ -156,6 +156,7 @@ const NumberInput = {
          * @return {[type]}       [description]
          */
         formatNumber(value) {
+            value = +value;
             const isPositive = value >= 0;
             const tempValue = '' + ((isPositive ? value : -value) || 0);
             if (this.format)
