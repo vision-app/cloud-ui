@@ -61,14 +61,6 @@
 </u-linear-layout>
 ```
 
-### 自定义宽高
-
-``` html
-<u-linear-layout>
-    <u-input value="自定义宽高" width="150" height="40"></u-input>
-</u-linear-layout>
-```
-
 ### 撤销输入
 
 ``` vue
@@ -91,8 +83,8 @@ export default {
 | --------- | ---- | ------- | ----------- |
 | type | String | `'text'` | 输入框的类型，目前只支持两种：`'text'`和`'password'` |
 | value | String | | 输入框的值 |
-| placeholder | String | | 原生属性 |
-| maxlength | Number | | 原生属性 |
+| placeholder | String |  | 原生属性 |
+| maxlength | Number |  | 原生属性 |
 | autofocus | Boolean | | 原生属性 |
 | readonly | Boolean | | 原生属性 |
 | disabled | Boolean | | 原生属性 |
@@ -114,7 +106,7 @@ export default {
 
 | Param | Type | Description |
 | ----- | ---- | ----------- |
-| $event.preventDefault | Function | 阻止关闭流程 |
+| $event.preventDefault | Function | 阻止change |
 | newValue | String | 新值 |
 | oldValue | String | 旧值 |
 

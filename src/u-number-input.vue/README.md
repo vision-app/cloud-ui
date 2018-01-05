@@ -19,24 +19,17 @@
 <u-number-input value="12" autofocus="autofocus"></u-number-input>
 ```
 
-### 只读
-``` html
-<u-number-input value="12" readonly="readonly"></u-number-input>
-```
-
 ### 最大值 最小值
 ``` html
 <u-number-input value="12" min="5" max="20"></u-number-input>
 ```
+### 只读与禁用
 
-### 指定宽高
 ``` html
-<u-number-input value="12" width="150" height="40"></u-number-input>
-```
-
-### 禁用
-``` html
-<u-number-input value="12" disabled="disabled"></u-number-input>
+<u-linear-layout>
+    <u-number-input value="12" readonly="readonly"></u-number-input>
+    <u-number-input value="12" disabled="disabled"></u-number-input>
+</u-linear-layout>
 ```
 
 ### 获取改变后的值change方法
@@ -68,16 +61,15 @@ export default {
 
 | Attr/Prop | Type | Default | Description |
 | --------- | ---- | ------- | ----------- |
-| value | String | '' | 输入框的值 |
-| format | String | `undefined` | 整数部分最小长度，如: '00'表示最少两位 |
-| placeholder | String | `''` | input框提示 |
-| min | Number | `undefined` | 最小值 |
-| max | Number | `undefined` | 最大值 |
-| autofocus | Boolean | false | 原生属性 |
-| readonly | Boolean | false | 原生属性 |
-| disabled | Boolean | false | 原生属性 |
-| width | String | `''` | 输入框宽度 |
-| height | String | `''` | 输入框高度 |
+| value | String |  | 输入框的值 |
+| max | [String, Number] |  | 最大值 |
+| min | [String, Number] |  | 最小值 |
+| format | String |  | 整数部分最小长度，如: '00'表示最少两位 |
+| placeholder | String |  | 原生属性 |
+| maxlength | Number |  | 原生属性 |
+| autofocus | Boolean | | 原生属性 |
+| readonly | Boolean | | 原生属性 |
+| disabled | Boolean | | 原生属性 |
 | size | String | `'normal'` | 大小扩展，支持一个值：`'mini'`, `'small'`, `'normal'`, `'large'`, `'huge'`, `'full'`，或两个值的组合，前者表示高度，后者表示宽度，类似CSS的padding书写格式 |
 | gap | Number | `1` | 按键每次增/减的值 |
 
@@ -97,7 +89,7 @@ export default {
 
 | Param | Type | Description |
 | ----- | ---- | ----------- |
-| $event.preventDefault | Function | 阻止关闭流程 |
+| $event.preventDefault | Function | 阻止change |
 | newValue | String | 新值 |
 | oldValue | String | 旧值 |
 

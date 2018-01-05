@@ -87,7 +87,8 @@ const NumberInput = {
             }
             const formatValue = this.formatNumber(event.newValue);
             if (('' + formatValue) !== ('' + event.newValue)) {
-                this.$refs.input.set(formatValue);
+                event.preventDefault();
+                setTimeout(() => this.$refs.input.set(formatValue));
                 return;
             }
 

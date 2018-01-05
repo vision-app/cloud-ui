@@ -23,14 +23,14 @@ const SECOND_MAX = '59';
 const TimePicker = {
     name: 'u-time-picker',
     props: {
-        time: {
-            type: String,
-            default: '00:00:00',
-        },
-        autofocus: [String, Boolean],
-        disabled: [String, Boolean],
-        readonly: [String, Boolean],
-        width: String,
+        time: { type: String, default: '00:00:00', validator: (val = '') => {
+            const arr = val.split(':').map((item) => +item);
+            return arr && arr.length === 3 && !arr.find((item) => isNaN(item) || item < 0);
+        } },
+        autofocus: { type: Boolean, default: false },
+        disabled: { type: Boolean, default: false },
+        readonly: { type: Boolean, default: false },
+        width: { type: String, default: '56' },
         minTime: {
             type: String,
             default: '00:00:00',
@@ -42,7 +42,7 @@ const TimePicker = {
     },
     data() {
         return {
-            showTime: this.time,
+            currentTime: this.time,
             hourmin: HOUR_MIN,
             hourmax: HOUR_MAX,
             minutemin: MINUTE_MIN,
@@ -53,22 +53,22 @@ const TimePicker = {
     },
     computed: {
         hour() {
-            const isOutOfRange = this.isOutOfRange(this.showTime);
+            const isOutOfRange = this.isOutOfRange(this.currentTime);
             if (isOutOfRange)
-                this.showTime = isOutOfRange;
-            return this.showTime.split(':')[0];
+                this.currentTime = isOutOfRange;
+            return this.currentTime.split(':')[0];
         },
         minute() {
-            const isOutOfRange = this.isOutOfRange(this.showTime);
+            const isOutOfRange = this.isOutOfRange(this.currentTime);
             if (isOutOfRange)
-                this.showTime = isOutOfRange;
-            return this.showTime.split(':')[1];
+                this.currentTime = isOutOfRange;
+            return this.currentTime.split(':')[1];
         },
         second() {
-            const isOutOfRange = this.isOutOfRange(this.showTime);
+            const isOutOfRange = this.isOutOfRange(this.currentTime);
             if (isOutOfRange)
-                this.showTime = isOutOfRange;
-            return this.showTime.split(':')[2];
+                this.currentTime = isOutOfRange;
+            return this.currentTime.split(':')[2];
         },
         sphourmin() {
             return this.minTime.split(':')[0];
@@ -91,28 +91,23 @@ const TimePicker = {
     },
     watch: {
         time(newValue) {
-            if (!newValue)
-                throw new TypeError('Invalid Time');
-
+            this.validTime(newValue);
             // 如果超出时间范围，则设置为范围边界的时间
             const isOutOfRange = this.isOutOfRange(newValue);
             if (isOutOfRange)
-                return this.showTime = isOutOfRange;
-            this.showTime = newValue;
+                return this.currentTime = isOutOfRange;
+            this.currentTime = newValue;
         },
-        showTime(newValue) {
-            if (!newValue)
-                throw new TypeError('Invalid Time');
-
+        currentTime(newValue) {
             // 如果超出时间范围，则设置为范围边界的时间
             const isOutOfRange = this.isOutOfRange(newValue);
             if (isOutOfRange)
-                return this.showTime = isOutOfRange;
-            if (this.showTime === this.minTime) {
+                return this.currentTime = isOutOfRange;
+            if (this.currentTime === this.minTime) {
                 this.hourmin = this.sphourmin;
                 this.minutemin = this.spminutemin;
                 this.secondmin = this.spsecondmin;
-            } else if (this.showTime === this.maxTime) {
+            } else if (this.currentTime === this.maxTime) {
                 this.hourmax = this.sphourmax;
                 this.minutemax = this.spminutemax;
                 this.secondmax = this.spsecondmax;
@@ -168,15 +163,34 @@ const TimePicker = {
         },
         changeHour(hour) {
             hour = '' + hour;
-            this.showTime = (hour.length > 1 ? hour : '0' + hour) + ':' + this.minute + ':' + this.second;
+            this.currentTime = (hour.length > 1 ? hour : '0' + hour) + ':' + this.minute + ':' + this.second;
         },
         changeMinute(minute) {
             minute = '' + minute;
-            this.showTime = this.hour + ':' + (minute.length > 1 ? minute : '0' + minute) + ':' + this.second;
+            this.currentTime = this.hour + ':' + (minute.length > 1 ? minute : '0' + minute) + ':' + this.second;
         },
         changeSecond(second) {
             second = '' + second;
-            this.showTime = this.hour + ':' + this.minute + ':' + (second.length > 1 ? second : '0' + second);
+            this.currentTime = this.hour + ':' + this.minute + ':' + (second.length > 1 ? second : '0' + second);
+        },
+        onBeforeChange(event, index) {
+            let cancel = false;
+            this.$emit('before-change', {
+                index,
+                newValue: event.newValue,
+                oldValue: event.oldValue,
+                preventDefault: () => cancel = true,
+            });
+            if (cancel)
+                event.preventDefault();
+        },
+        // 格式必须为三个正数':'连接
+        validTime(time) {
+            if (!time)
+                throw new TypeError('Invalid Time');
+            const arr = time.split(':').map((item) => +item);
+            if (!arr || arr.length !== 3 || arr.find((item) => isNaN(item) || item < 0))
+                throw new TypeError('Invalid Time');
         },
     },
 };

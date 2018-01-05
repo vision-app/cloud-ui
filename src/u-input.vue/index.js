@@ -18,17 +18,22 @@ export default {
             this.inputValue = newValue;
         },
         inputValue(newValue, oldValue) {
+            if (this.canceled) { // 取消输入后，将inputValue赋值为currentValue时不需要发送before-change事件
+                this.canceled = false;
+                return;
+            }
             let cancel = false;
             this.$emit('before-change', {
                 newValue,
-                oldValue,
+                oldValue: this.currentValue,
                 preventDefault: () => cancel = true,
             });
             if (cancel) { // 取消输入
+                this.canceled = true;
                 this.inputValue = this.currentValue;
                 return;
             }
-            this.currentValue = this.inputValue;
+            this.currentValue = newValue;
         },
     },
     methods: {
