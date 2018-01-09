@@ -9,12 +9,12 @@
 const MultiSelect = {
     name: 'u-multi-select',
     props: {
-        options: Array,
-        readonly: Boolean,
-        disabled: Boolean,
+        options: { type: Array, default: () => [] },
+        readonly: { type: Boolean, default: false },
+        disabled: { type: Boolean, default: false },
         visible: { type: Boolean, default: true },
         width: { type: [String, Number], default: '240' },
-        value: Array,
+        value: { type: Array, default: () => [] },
     },
     data() {
         return {

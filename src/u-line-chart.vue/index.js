@@ -24,12 +24,12 @@ const TICKES = [2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20, 30, 40, 50, 100, 200, 50
 export default {
     name: 'u-line-chart',
     props: {
-        data: Array,
+        data: { type: Array, default: () => [] },
         title: String,
         caption: String,
-        series: Array,
-        border: Boolean,
-        legend: Boolean,
+        series: { type: Array, default: () => [] },
+        border: { type: Boolean, default: false },
+        legend: { type: Boolean, default: true },
         width: {
             type: String,
             default: '100%',
@@ -38,10 +38,10 @@ export default {
             type: String,
             default: '480px',
         },
-        xAxis: Object,
-        yAxis: Object,
-        smooth: Boolean,
-        fill: Boolean,
+        xAxis: { type: Object, default: () => ({}) },
+        yAxis: { type: Object, default: () => ({}) },
+        smooth: { type: Boolean, default: false },
+        fill: { type: Boolean, default: false },
         titleAlign: { type: String, default: 'center' },
     },
     data() {

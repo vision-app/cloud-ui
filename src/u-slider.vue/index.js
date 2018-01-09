@@ -26,6 +26,21 @@ export default {
         currentValue(value, oldValue) {
             value = +value;
 
+            if (this.isRecovery) {
+                this.isRecovery = false;
+                return;
+            }
+
+            let cancel = false;
+            this.$emit('before-change', {
+                preventDefault: () => cancel = true,
+            });
+            if (cancel) {
+                this.currentValue = oldValue;
+                this.isRecovery = true;
+                return;
+            }
+
             this.$emit('update:value', value);
             this.$emit('change', {
                 value,

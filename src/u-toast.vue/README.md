@@ -53,7 +53,7 @@ export default {
 </script>
 ```
 
-## API
+## Toast API
 ### Attrs/Props
 
 | Attr/Prop | Type | Default | Description |
@@ -64,4 +64,12 @@ export default {
 | state | String | '' | 可选值有info，success, warnning, error和默认的五种样式toast |
 | message | String | '' | 提示内容 |
 | closeable | Boolean | false | 是否可关闭提示，默认不可关闭 |
+
+### Events 
+#### @close
+关闭
+| Param | Type | Description |
+| ----- | ---- | ----------- |
+| $event.sender | Object | 事件发送者 |
+| $event.item | Object | 关闭项 |
 

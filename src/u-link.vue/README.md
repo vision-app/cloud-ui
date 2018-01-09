@@ -20,7 +20,7 @@
 <u-link to="/proto-ui/u-link">to</u-link>
 ```
 
-## API
+## Link API
 ### Props/Attrs
 
 | Prop/Attr | Type | Default | Description |

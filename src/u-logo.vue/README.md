@@ -1,4 +1,4 @@
-# Logo
+# 标识 Logo
 
 ## 示例
 ### 基本形式
@@ -45,3 +45,18 @@
     </div>
 </u-linear-layout>
 ```
+
+## Logo API
+
+### Attrs/Props
+
+| Prop | Type | Default | Description |
+| --------- | ---- | ------- | ----------- |
+| name |  | `c` | 标识名 |
+| color |  | `c` | 背景颜色 |
+
+### Slots
+
+| Slot | Description |
+| ---- | ----------- |
+| html模板 |  |

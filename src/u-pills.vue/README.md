@@ -1,4 +1,4 @@
-# Pills
+# 药丸 Pills
 
 ## Examples
 ### Basic

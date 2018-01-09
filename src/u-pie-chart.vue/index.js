@@ -1,12 +1,12 @@
 export default {
     name: 'u-pie-chart',
     props: {
-        data: Array,
+        data: { type: Array, default: () => [] },
         title: String,
         caption: String,
-        series: Array,
-        border: Boolean,
-        legend: Boolean,
+        series: { type: Array, default: () => [] },
+        border: { type: Boolean, default: false },
+        legend: { type: Boolean, default: true },
         width: {
             type: String,
             default: '100%',

@@ -4,7 +4,7 @@ export default {
         title: String,
         sortable: { type: Boolean, default: false },
         filter: { type: Boolean, default: false },
-        options: Array,
+        options: { type: Array, default: () => [] },
         value: [String, Number, Boolean],
         label: String,
         type: String,
@@ -13,10 +13,7 @@ export default {
         formatter: Function,
         sortMethod: Function,
         filterMethod: Function,
-        placement: {
-            type: String,
-            default: 'bottom-start',
-        },
+        placement: { type: String, default: 'bottom-start' },
         tooltip: { type: Boolean, default: false },
     },
     data() {

@@ -58,7 +58,7 @@ export default {
 </script>
 ```
 
-## API
+## Lightbox API
 
 ### Attrs/Props
 

@@ -1,11 +1,8 @@
-# 表格 Table
+# 表格视图 TableView
 
 ## 示例
-### 基本形式
 
-
-
-### demo1 排序和格式化
+### 排序和格式化
 ``` vue
 <template>
     <div>
@@ -51,7 +48,7 @@ export default {
 </script>
 ```
 
-### demo2 自定义排序方法
+### 自定义排序方法
 ``` vue
 <template>
     <u-table-view :data="tdata">
@@ -97,7 +94,7 @@ export default {
 </script>
 ```
 
-### demo3 全选
+### 选择
 ``` vue
 <template>
     <u-table-view :data="tdata" @selection-change="selectionChange($event)">
@@ -145,7 +142,7 @@ export default {
 </script>
 ```
 
-### demo4 select
+### 过滤
 ``` vue
 <template>
     <u-table-view :data="tdata">
@@ -225,7 +222,7 @@ export default {
 };
 </script>
 ```
-### demo5 作用域插槽方式
+### 作用域插槽方式
 ``` vue
 <template>
     <div>
@@ -246,7 +243,7 @@ export default {
                 <span style="margin-left:10px;">{{current.address}}</span>
             </div>
         </u-modal>
-        <u-button @click="tableShow"> show </u-button>
+        <u-button @click="show = !show"> {{show ? 'hide' : 'show'}} </u-button>
     </div>
 </template>
 <script>
@@ -324,12 +321,76 @@ export default {
             this.visible = true;
             this.current = row;
         },
-        tableShow() {
-            this.show = true;
-        }
     }
 };
 </script>
 ```
+## TableView API
+
+### Attrs/Props
+
+| Prop | Type | Default | Description |
+| --------- | ---- | ------- | ----------- |
+| title | String |  | 标题 |
+| data | Array | `[]` | 数据 |
+| allChecked | Boolean | `false` | 是否全选 |
+| defaultSort | Object | `{label: undefined, order: undefined}` | 排序配置 |
+
+### Slots
+
+| Slot | Description |
+| ---- | ----------- |
+| u-table-view-column | 表格列项 |
+
+### Events 
+#### @select-all
+选中所有
+| Param | Type | Description |
+| ----- | ---- | ----------- |
+| select-all | Array | 所有项 |
+
+#### @selection-change
+选中项变化
+| Param | Type | Description |
+| ----- | ---- | ----------- |
+| selection-change | Array | 当前选中的所有项 |
+
+#### @select
+选择某项
+| Param | Type | Description |
+| ----- | ---- | ----------- |
+| select | Array | 当前选中的所有项 |
+
+#### @select-cancel
+取消选择
+| Param | Type | Description |
+| ----- | ---- | ----------- |
+| select-cancel | Array | 当前选中的所有项 |
+
+## TableViewColumn API
+
+### Attrs/Props
+
+| Prop | Type | Default | Description |
+| --------- | ---- | ------- | ----------- |
+| title | String |  | 标题 |
+| sortable | Boolean | `false` | 是否可排序 |
+| label | String |  | 排序属性 |
+| filter | Boolean | `false` | 是否可过滤 |
+| options | Array | `[]` | 过滤选项 |
+| value | [String, Number, Boolean] |  | 选择值 |
+| type | String |  |  |
+| formatter | Function |  | 格式化 |
+| sortMethod | Function |  | 排序 |
+| filterMethod | Function |  | 过滤 |
+| placement | String | `'bottom-start'` |  |
+| tooltip | Boolean | `fales` | 是否显示提示 |
+
+
+### Slots
+
+| Slot | Description |
+| ---- | ----------- |
+| - | - |
 
 

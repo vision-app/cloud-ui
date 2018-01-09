@@ -26,7 +26,7 @@
 </u-grid-layout>
 ```
 
-## API
+## Slider API
 ### Props/Attrs
 
 | Prop/Attr | Type | Default | Description |
@@ -39,6 +39,12 @@
 | disabled | Boolean | `false` | 是否禁用 |
 
 ### Events
+
+#### @before-change
+改变前触发
+| Param | Type | Description |
+| ----- | ---- | ----------- |
+| $event.preventDefault | Function | 阻止value改变 |
 
 #### @change
 

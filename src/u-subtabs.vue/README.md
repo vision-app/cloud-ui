@@ -85,7 +85,7 @@
 </u-subtabs>
 ```
 
-## Tabs API
+## Subtabs API
 ### Props/Attrs
 
 | Prop/Attr | Type | Default | Description |
@@ -156,7 +156,7 @@
 | itemVM | Tab | 关闭的标签页实例 |
 | $event.preventDefault | Function | 阻止关闭后自动选择页的流程 |
 
-## Tab API
+## Subtab API
 ### Props/Attrs
 
 | Prop/Attr | Type | Default | Description |

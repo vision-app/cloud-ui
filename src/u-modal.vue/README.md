@@ -84,7 +84,7 @@ export default {
 </u-modal>
 ```
 
-## API
+## Modal API
 ### Attrs/Props
 
 | Attr/Prop | Type | Default | Description |

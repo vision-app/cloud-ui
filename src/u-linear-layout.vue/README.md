@@ -139,7 +139,7 @@
 </u-linear-layout>
 ```
 
-## API
+## LinearLayout API
 ### Attrs/Props
 
 | Attr/Prop | Type | Default | Description |

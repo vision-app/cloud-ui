@@ -19,12 +19,12 @@ import { deepCopy } from '../base/utils';
 export default {
     name: 'u-xbar-chart',
     props: {
-        data: Array,
+        data: { type: Array, default: () => [] },
         title: String,
         caption: String,
-        series: Array,
-        border: Boolean,
-        legend: Boolean,
+        series: { type: Array, default: () => [] },
+        border: { type: Boolean, default: false },
+        legend: { type: Boolean, default: true },
         width: {
             type: String,
             default: '100%',
@@ -33,9 +33,9 @@ export default {
             type: String,
             default: '480px',
         },
-        xAxis: Object,
-        yAxis: Object,
-        stack: [String, Boolean],
+        xAxis: { type: Object, default: () => ({}) },
+        yAxis: { type: Object, default: () => ({}) },
+        stack: { type: Boolean, default: false },
         order: { type: String, default: 'desc' },
     },
     data() {

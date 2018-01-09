@@ -1,14 +1,15 @@
-# 多行输入 Textarea
+# Textarea
 
-## 示例
+## Examples
+### Basic
 
-### 基本形式
+Most attributes are inherited from `<textarea>` element.
 
 ``` html
 <u-textarea placeholder="Details" autofocus></u-textarea>
 ```
 
-### 只读与禁用
+### Readonly & Disabled
 
 ``` html
 <u-linear-layout>
@@ -16,7 +17,7 @@
     <u-textarea value="Disabled" disabled></u-textarea>
 </u-linear-layout>
 ```
-### 规格扩展
+### Size Extension
 
 ```html
 <u-linear-layout direction="vertical">
@@ -32,17 +33,17 @@
 </u-linear-layout>
 ```
 
-## Textarea API
+## API
 ### Attrs/Props
 
 | Attr/Prop | Type | Default | Description |
 | --------- | ---- | ------- | ----------- |
-| value | String | | 值 |
-| placeholder | String | | 原生属性 |
-| maxlength | Number | | 原生属性 |
-| autofocus | Boolean | `false` | 原生属性 |
-| readonly | Boolean | `false` | 原生属性 |
-| disabled | Boolean | `false` | 原生属性 |
+| value | String | | The value |
+| placeholder | String | | Original attribute |
+| maxlength | Number | | Original attribute |
+| autofocus | Boolean | | Original attribute |
+| readonly | Boolean | | Original attribute |
+| disabled | Boolean | | Original attribute |
 
 ### Slots
 

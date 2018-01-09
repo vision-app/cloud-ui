@@ -4,7 +4,7 @@ export default {
     name: 'u-table-view',
     props: {
         title: String,
-        data: Array,
+        data: { type: Array, default: () => [] },
         allChecked: { type: Boolean, default: false },
         defaultSort: {
             type: Object,

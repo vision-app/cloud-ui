@@ -9,7 +9,7 @@
 const SelectColor = {
     name: 'u-color-select',
     props: {
-        options: { type: Array, default: [] },
+        options: { type: Array, default: () => [] },
         readonly: { type: Boolean, default: false },
         disabled: { type: Boolean, default: false },
         // visible: { type: Boolean, default: true },

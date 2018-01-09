@@ -13,7 +13,12 @@
 </u-linear-layout>
 ```
 
-## API
+## Label API
+### Props/Attrs
+| Attr/Prop | Type | Default | Description |
+| --------- | ---- | ------- | ----------- |
+| color | String |  | 颜色 |
+
 ### Slots
 
 | Slot | Description |

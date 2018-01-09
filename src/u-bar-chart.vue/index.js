@@ -17,9 +17,9 @@
 export default {
     name: 'u-bar-chart',
     props: {
-        data: { type: Array, default: [] },
+        data: { type: Array, default: () => [] },
         title: String,
-        series: { type: Array, default: [] },
+        series: { type: Array, default: () => [] },
         border: { type: Boolean, default: false },
         legend: { type: Boolean, default: false },
         width: {
@@ -30,8 +30,8 @@ export default {
             type: String,
             default: '480px',
         },
-        xAxis: { type: Object, default: {} },
-        yAxis: { type: Object, default: {} },
+        xAxis: { type: Object, default: () => ({}) },
+        yAxis: { type: Object, default: () => ({}) },
         stack: { type: Boolean, default: false },
     },
     data() {

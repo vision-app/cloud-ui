@@ -1,6 +1,6 @@
-# 加载中 (Loading)
+# 加载中 Loading
 
-## Examples
+## 示例
 ### 大小扩展
 
 ``` html
@@ -10,7 +10,7 @@
     <u-loading size="large"></u-loading>
 </u-linear-layout>
 ```
-## API
+## Loading API
 ### Attrs/Props
 | Attr/Prop | Type | Default | Description |
 | --------- | ---- | ------- | ----------- |

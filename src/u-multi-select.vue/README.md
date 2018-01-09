@@ -40,3 +40,15 @@ export default {
 };
 </script>
 ```
+
+## MultiSelect API
+
+### Attrs/Props
+
+| Prop | Type | Default | Description |
+| --------- | ---- | ------- | ----------- |
+| options | Array | `[]` | 下拉菜单列表 |
+| readonly | Boolean | `false` | 是否只读 |
+| disabled | Boolean | `false` | 是否禁用 |
+| visible | Boolean | `true` | 是否可见 |
+| value | Array | `[]` | 选中值 |
