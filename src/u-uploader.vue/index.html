@@ -1,0 +1,11 @@
+<div :class="$style.root" v-if="!disabled" v-show="visible">
+    <div @click="upload()">
+        <slot></slot>
+    </div>
+    <form method="POST" :action="url" :target="'iframe'+_id" :enctype="contentType" ref="form">
+        <!-- IE需要重置input[type=file] -->
+        <input v-if = "!sending" type="file" :name="name" @click="xx" ref="file" @change="_submit()"/>
+        <input v-for="key in Object.keys(data)" type="hidden" :name="key" :value="data[key]"/>
+    </form>
+    <iframe :name="'iframe'+_id" @load="_onLoad()" ref="iframe"></iframe>
+</div>

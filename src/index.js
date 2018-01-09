@@ -72,6 +72,7 @@ import TimePicker from './u-time-picker.vue';
 import Toast from './u-toast.vue';
 import Tooltip from './u-tooltip.vue';
 import XBarChart from './u-xbar-chart.vue';
+import Uploader from './u-uploader.vue';
 
 export {
     BarChart,
@@ -141,6 +142,7 @@ export {
     Toast,
     Tooltip,
     XBarChart,
+    Uploader,
 };
 
 export {
