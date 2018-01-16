@@ -3,6 +3,6 @@
         <input :class="$style.input" :placeholder="placeholder" :value="format(currentDate,'yyyy-MM-dd')" ref="input" :autofocus="autofocus" :readonly="readonly" :disabled="disabled" :style="{width: width+'px'}"  @change="onInput($event)">
     </div>
     <div :class="$style.body" slot="popper" @click.stop>
-        <u-calendar :minDate="minDate" :maxDate="maxDate" :readonly="readonly" :disabled="disabled" :date.sync="currentDate"  @change="change($event)" ref="calendar"/>
+        <u-calendar :minDate="minDate" :maxDate="maxDate" :readonly="readonly" :disabled="disabled" :date.sync="currentDate"  @change="onChange($event)" @before-change="onBeforeChange($event)" ref="calendar"/>
     </div>
 </u-popper>

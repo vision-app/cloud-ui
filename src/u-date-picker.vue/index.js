@@ -57,8 +57,7 @@ export default {
         },
     },
     methods: {
-        beforeChange(event) {
-            debugger;
+        onBeforeChange(event) {
             let cancel = false;
             this.$emit('before-change', {
                 preventDefault: () => cancel = true,
@@ -90,11 +89,14 @@ export default {
          * calendar组件的change事件触发
          * @return {[type]} [description]
          */
-        change($event) {
+        onChange($event) {
+            const oldValue = this.currentDate;
             this.currentDate = this.returnTime($event.date);
             this.$emit('change', {
                 sender: this,
                 date: this.currentDate,
+                value: this.currentDate,
+                oldValue,
             });
 
             this.$emit('update:date', this.currentDate);

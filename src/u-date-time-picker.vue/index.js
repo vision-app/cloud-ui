@@ -15,13 +15,13 @@ import { clickOutside } from '../base/directives';
 export default {
     name: 'u-date-time-picker',
     props: {
-        disabled: [String, Boolean],
+        disabled: { type: Boolean, default: false },
         placeholder: {
             type: String,
             default: '请选择时间',
         },
-        readonly: [String, Boolean],
-        autofocus: [String, Boolean],
+        readonly: { type: Boolean, default: false },
+        autofocus: { type: Boolean, default: false },
         minDate: [String, Number, Object],
         maxDate: [String, Number, Object],
         date: [String, Number, Date],
@@ -29,7 +29,6 @@ export default {
             type: [String, Number],
             default: '154',
         },
-
     },
     data() {
         return {
@@ -40,10 +39,10 @@ export default {
         };
     },
     computed: {
-        showTime() {
+        currentTime() {
             return this.format(this.dateTime, 'HH:mm:ss');
         },
-        showDate() {
+        currentDate() {
             return this.format(this.dateTime, 'yyyy-MM-dd');
         },
         minCalendarDate() {
@@ -66,7 +65,7 @@ export default {
         date(newValue) {
             this.dateTime = this.format(newValue, 'yyyy-MM-dd HH:mm:ss');
         },
-        dateTime(newValue) {
+        dateTime(newValue, oldValue) {
             // 字符类型自动转为日期类型
 
             if (newValue === 'Invalid Date' || newValue === 'NaN')
@@ -97,7 +96,9 @@ export default {
              */
             this.$emit('change', {
                 sender: this,
-                date: new Date(newValue.replace(/-/g, '/')).getTime(),
+                date: new Date(newValue.replace(/-/g, '/')).getTime(), // 以后不要用了
+                newValue: new Date(newValue.replace(/-/g, '/')).getTime(),
+                oldValue: new Date(oldValue.replace(/-/g, '/')).getTime(),
             });
         },
     },
@@ -147,6 +148,14 @@ export default {
             date.setMinutes(time[1]);
             date.setSeconds(time[2]);
             this.dateTime = this.format(date, 'yyyy-MM-dd HH:mm:ss');
+        },
+        onBeforeDateTimeChange(event) {
+            let cancel = false;
+            this.$emit('before-change', {
+                preventDefault: () => cancel = true,
+            });
+            if (cancel)
+                event.preventDefault(); // 阻止calendar的change事件
         },
         /**
          * @method onInput($event) 输入日期

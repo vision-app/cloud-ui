@@ -98,7 +98,7 @@ const TimePicker = {
                 return this.currentTime = isOutOfRange;
             this.currentTime = newValue;
         },
-        currentTime(newValue) {
+        currentTime(newValue, oldValue) {
             // 如果超出时间范围，则设置为范围边界的时间
             const isOutOfRange = this.isOutOfRange(newValue);
             if (isOutOfRange)
@@ -127,7 +127,9 @@ const TimePicker = {
              */
             this.$emit('change', {
                 sender: this,
-                time: newValue,
+                time: newValue, // 弃用
+                value: newValue,
+                oldValue,
             });
         },
         minTime(newValue, oldValue) {
@@ -175,10 +177,11 @@ const TimePicker = {
         },
         onBeforeChange(event, index) {
             let cancel = false;
+            const timeArr = this.currentTime.split(':');
+            timeArr[index] = +event.newValue < 10 ? '0' + event.newValue : '' + event.newValue;
             this.$emit('before-change', {
-                index,
-                newValue: event.newValue,
-                oldValue: event.oldValue,
+                value: timeArr.join(':'),
+                oldValue: this.currentTime,
                 preventDefault: () => cancel = true,
             });
             if (cancel)

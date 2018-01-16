@@ -47,7 +47,8 @@
 | Param | Type | Description |
 | ----- | ---- | ----------- |
 | sender | Object | 事件发送对象 |
-| date | Date | 当前选择日期 |
+| value | Date | 当前选择日期 |
+| oldValue | Date | 旧值 |
 #### @select @deprecated 
 select事件触发：只有调用select方法时触发
 | Param | Type | Description |

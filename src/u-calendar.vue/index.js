@@ -94,7 +94,7 @@ const Calendar = {
             this.setCurrentDate(this.transformDate(newValue));
             this.updateFlag = true;
         },
-        currentDate(newValue) {
+        currentDate(newValue, oldValue) {
             if (newValue) {
                 if (this.updateFlag) {
                     this.updateFlag = false;
@@ -109,6 +109,8 @@ const Calendar = {
             this.$emit('change', {
                 sender: this,
                 date: newValue,
+                value: newValue,
+                oldValue,
             });
 
             this.$emit('update:date', new Date(newValue));

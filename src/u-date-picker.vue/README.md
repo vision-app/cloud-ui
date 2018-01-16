@@ -22,14 +22,12 @@
 <u-date-picker date="2018-08-08" min-date="2018-08-06" max-date="2018-08-18"></u-date-picker>
 ```
 
-### 禁用
+### 只读与禁用
 ``` html
-<u-date-picker disabled date="2018-08-08"></u-date-picker>
-```
-
-### 只读
-``` html
-<u-date-picker readonly date="2018-08-08"></u-date-picker>
+<u-linear-layout>
+    <u-date-picker readonly date="2018-08-08"></u-date-picker>
+    <u-date-picker disabled date="2018-08-08"></u-date-picker>
+</u-linear-layout>
 ```
 
 ### 获取改变值方法 change select
@@ -90,7 +88,8 @@ export default {
 | Param | Type | Description |
 | ----- | ---- | ----------- |
 | sender | Object | 事件发送对象 |
-| date | Date | 当前选择日期 |
+| value | Date | 当前选择日期 |
+| oldValue | Date | 旧值 |
 #### @toggle
 toggle日历弹窗时触发
 | Param | Type | Description |

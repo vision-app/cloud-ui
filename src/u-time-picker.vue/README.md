@@ -73,9 +73,8 @@ export default {
 | Param | Type | Description |
 | ----- | ---- | ----------- |
 | $event.preventDefault | Function | 阻止时间改变 |
-| index | Number | 0:时变化， 1：分变化， 2：秒变化 |
-| newValue | String | 新值 |
-| oldValue | String | 旧值 |
+| value | String | 新值，格式：'xx:xx:xx' |
+| oldValue | String | 旧值，格式：'xx:xx:xx' |
 
 #### @change
 
@@ -83,6 +82,6 @@ export default {
 
 | Param | Type | Description |
 | ----- | ---- | ----------- |
-| $event.value | String | 改变后的值 |
-| $event.oldValue | String | 旧的值 |
+| $event.value | String | 改变后的值，格式：'xx:xx:xx' |
+| $event.oldValue | String | 旧的值，格式：'xx:xx:xx' |
 
