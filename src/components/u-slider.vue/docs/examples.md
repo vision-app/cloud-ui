@@ -39,6 +39,7 @@
 ```
 
 ### 只读和禁用
+
 ``` html
 <u-grid-layout>
     <u-grid-layout-column :span="6">
@@ -46,6 +47,84 @@
     </u-grid-layout-column>
     <u-grid-layout-column :span="6">
         <u-slider :value="36" disabled></u-slider>
+    </u-grid-layout-column>
+</u-grid-layout>
+```
+
+### 倒序
+
+```html
+<u-grid-layout>
+    <u-grid-layout-column :span="6">
+        <u-slider :value="50" :range="[20, 85]" reverse></u-slider>
+    </u-grid-layout-column>
+    <u-grid-layout-column :span="6">
+        <u-slider :value="40" :step="10" :range="[30]" reverse></u-slider>
+    </u-grid-layout-column>
+</u-grid-layout>
+```
+
+### 倒序-只读、禁用
+
+```html
+<u-grid-layout>
+    <u-grid-layout-column :span="6">
+        <u-slider :value="36" readonly reverse></u-slider>
+    </u-grid-layout-column>
+    <u-grid-layout-column :span="6">
+        <u-slider :value="36" disabled reverse></u-slider>
+    </u-grid-layout-column>
+</u-grid-layout>
+```
+
+### 垂直
+
+```html
+<u-grid-layout>
+    <u-grid-layout-column :span="6">
+        <u-slider :value="50" :range="[20, 85]" vertical></u-slider>
+    </u-grid-layout-column>
+    <u-grid-layout-column :span="6">
+        <u-slider :value="40" :step="10" :range="[30]" vertical></u-slider>
+    </u-grid-layout-column>
+</u-grid-layout>
+```
+
+### 垂直-只读、禁用
+
+```html
+<u-grid-layout>
+    <u-grid-layout-column :span="6">
+        <u-slider :value="36" readonly vertical></u-slider>
+    </u-grid-layout-column>
+    <u-grid-layout-column :span="6">
+        <u-slider :value="36" disabled vertical></u-slider>
+    </u-grid-layout-column>
+</u-grid-layout>
+```
+
+### 垂直倒序
+
+```html
+<u-grid-layout>
+    <u-grid-layout-column :span="6">
+        <u-slider :value="50" :range="[20, 85]" vertical reverse></u-slider>
+    </u-grid-layout-column>
+    <u-grid-layout-column :span="6">
+        <u-slider :value="40" :step="10" :range="[30]" vertical reverse></u-slider>
+    </u-grid-layout-column>
+</u-grid-layout>
+```
+
+### 垂直倒序-只读、禁用
+
+```html
+<u-grid-layout>
+    <u-grid-layout-column :span="6">
+        <u-slider :value="36" readonly vertical reverse></u-slider>
+    </u-grid-layout-column>
+    <u-grid-layout-column :span="6">
+        <u-slider :value="36" disabled vertical reverse></u-slider>
     </u-grid-layout-column>
 </u-grid-layout>
 ```

@@ -46,6 +46,14 @@
       type: boolean
       default: false
       description: 是否禁用
+    - name: reverse
+      type: boolean
+      default: false
+      description: 是否倒序
+    - name: vertical
+      type: boolean
+      default: false
+      description: 是否垂直
     - name: unit
       type: string
       default: null

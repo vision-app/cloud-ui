@@ -13,6 +13,8 @@ export const USlider = {
         range: { type: Array, default() { return []; } },
         readonly: { type: Boolean, default: false },
         disabled: { type: Boolean, default: false },
+        reverse: { type: Boolean, default: false },
+        vertical: { type: Boolean, default: false },
     },
     data() {
         return {
@@ -25,7 +27,7 @@ export const USlider = {
     watch: {
         value(value) {
             this.currentValue = value;
-            this.handleEl.style.left = this.percent + '%';
+            this.fixHandleEl();
         },
         currentValue(value, oldValue) {
             value = +value;
@@ -35,12 +37,6 @@ export const USlider = {
         range(range) {
             this.currentRange = this.normalizeRange(range);
         },
-        min(value) {
-            this.handleEl.style.left = this.percent + '%';
-        },
-        max(value) {
-            this.handleEl.style.left = this.percent + '%';
-        },
     },
     computed: {
         percent: {
@@ -49,8 +45,8 @@ export const USlider = {
             },
             set(percent) {
                 const value = this.fix(+this.min + (this.max - this.min) * percent / 100);
-
                 this.currentValue = value;
+                this.fixHandleEl();
                 this.$emit('input', value, this);
                 this.$emit('update:value', value, this);
             },
@@ -63,12 +59,39 @@ export const USlider = {
             const end = Math.min(this.currentRange[1], this.max);
             return (this.max - end) / (this.max - this.min) * 100;
         },
+        showRangeStartPercent() {
+            const { reverse, rangeStartPercent, rangeEndPercent } = this;
+            return reverse ? rangeEndPercent : rangeStartPercent;
+        },
+        showRangeEndPercent() {
+            const { reverse, rangeStartPercent, rangeEndPercent } = this;
+            return reverse ? rangeStartPercent : rangeEndPercent;
+        },
+        showPercent() {
+            const { reverse, percent, vertical } = this;
+            if (vertical || !reverse) {
+                return percent;
+            }
+            return 100 - percent;
+        },
     },
     mounted() {
         this.handleEl = this.$refs.handle;
-        this.handleEl.style.left = this.percent + '%';
+        this.fixHandleEl();
     },
     methods: {
+        fixHandleEl() {
+            if (this.handleEl) {
+                const attr = this.vertical ? 'top' : 'left';
+                let percent = 0;
+                if (this.vertical) {
+                    percent = this.reverse ? this.percent : 100 - this.percent;
+                } else {
+                    percent = this.reverse ? 100 - this.percent : this.percent;
+                }
+                this.handleEl.style[attr] = percent + '%';
+            }
+        },
         normalizeRange(range) {
             range = Array.from(range);
             if (range[0] === undefined)
@@ -88,29 +111,34 @@ export const USlider = {
             value = +value.toFixed(this.precision < 1 ? -Math.log10(this.precision) : 0);
             return value;
         },
-        onDragStart($event) {
-            this.grid.x = this.step / (this.max - this.min) * $event.range.width;
-
+        handleDrag($event) {
             const oldValue = this.currentValue;
-            this.percent = $event.left / $event.range.width * 100;
-            const percent = this.percent;
-            this.handleEl.style.left = percent + '%';
+            let length = this.vertical ? $event.top : $event.left;
+            const rangeLength = this.vertical ? $event.range.height : $event.range.width;
+            if (this.vertical) {
+                if (!this.reverse) {
+                    length = rangeLength - length;
+                }
+            } else {
+                if (this.reverse) {
+                    length = rangeLength - length;
+                }
+            }
+            const percent = this.percent = length / rangeLength * 100;
             this.$emit('slide', {
                 oldValue,
                 value: this.currentValue,
                 percent,
             }, this);
         },
+        onDragStart($event) {
+            const attr = this.vertical ? 'y' : 'x';
+            const rangeLength = this.vertical ? $event.range.height : $event.range.width;
+            this.grid[attr] = this.step / (this.max - this.min) * rangeLength;
+            this.handleDrag($event);
+        },
         onDrag($event) {
-            const oldValue = this.currentValue;
-            this.percent = $event.left / $event.range.width * 100;
-            const percent = this.percent;
-            this.handleEl.style.left = percent + '%';
-            this.$emit('slide', {
-                oldValue,
-                value: this.currentValue,
-                percent,
-            }, this);
+            this.handleDrag($event);
         },
     },
 };

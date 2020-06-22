@@ -30,6 +30,14 @@
       type: boolean
       default: false
       description: 是否只读
+    - name: reverse
+      type: boolean
+      default: false
+      description: 是否倒序
+    - name: vertical
+      type: boolean
+      default: false
+      description: 是否垂直
     - name: disabled
       type: boolean
       default: false
